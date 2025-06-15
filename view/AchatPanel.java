@@ -6,7 +6,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.*; 
+import model.*;
 
 public class AchatPanel extends JPanel {
     private Pharmacie pharmacie;
@@ -15,11 +15,9 @@ public class AchatPanel extends JPanel {
     private JTextField quantiteChamp;
     private JButton ajouterAuPanierBtn;
 
-    // Tableau du panier
     private JTable panierTable;
     private DefaultTableModel panierTableModel;
 
-    // Composants pour le total et le paiement
     private JLabel totalLabel;
     private JTextField montantRecuChamp;
     private JButton finaliserAchatBtn;
@@ -27,28 +25,24 @@ public class AchatPanel extends JPanel {
 
     private JLabel messageLabel;
 
-    // Panier temporaire (liste de LigneFacture avant de créer la Facture finale)
     private List<LigneFacture> panierActuel;
     private double totalPanier;
 
-    // Pour notifier MainFrame des changements de données
     private PharmacieDataListener dataListener;
 
-    // Constructeur modifié pour accepter un PharmacieDataListener
     public AchatPanel(Pharmacie pharmacie, PharmacieDataListener dataListener) {
         this.pharmacie = pharmacie;
-        this.dataListener = dataListener; // Store the listener
+        this.dataListener = dataListener;
         this.panierActuel = new ArrayList<>();
         this.totalPanier = 0.0;
 
-        setLayout(new BorderLayout(10, 10)); // Espacement entre les zones
+        setLayout(new BorderLayout(10, 10));
 
-        // --- Zone d'ajout de produit au panier (NORTH) ---
         JPanel ajoutPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
         ajoutPanel.setBorder(BorderFactory.createTitledBorder("Ajouter au Panier"));
 
         produitSelectionCombo = new JComboBox<>();
-        updateProductList(); // Remplir la combo box au démarrage
+        updateProductList();
         ajoutPanel.add(new JLabel("Produit :"));
         ajoutPanel.add(produitSelectionCombo);
 
@@ -62,7 +56,6 @@ public class AchatPanel extends JPanel {
 
         add(ajoutPanel, BorderLayout.NORTH);
 
-        // --- Tableau du panier (CENTER) ---
         JPanel panierDisplayPanel = new JPanel(new BorderLayout());
         panierDisplayPanel.setBorder(BorderFactory.createTitledBorder("Panier d'Achat"));
 
@@ -70,15 +63,14 @@ public class AchatPanel extends JPanel {
         panierTableModel = new DefaultTableModel(colonnesPanier, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Rendre les cellules non éditables
+                return false;
             }
         };
         panierTable = new JTable(panierTableModel);
-        panierTable.setFillsViewportHeight(true); // Pour que le tableau remplisse la zone disponible
+        panierTable.setFillsViewportHeight(true);
         JScrollPane scrollPane = new JScrollPane(panierTable);
         panierDisplayPanel.add(scrollPane, BorderLayout.CENTER);
         
-        // Boutons pour gérer le panier (ex: supprimer une ligne)
         JPanel panierControlPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton supprimerLigneBtn = new JButton("Supprimer du Panier");
         supprimerLigneBtn.addActionListener(_ -> supprimerProduitDuPanier());
@@ -87,14 +79,13 @@ public class AchatPanel extends JPanel {
 
         add(panierDisplayPanel, BorderLayout.CENTER);
 
-        // --- Zone de total et paiement (SOUTH) ---
         JPanel paiementPanel = new JPanel(new GridLayout(4, 2, 5, 5));
         paiementPanel.setBorder(BorderFactory.createTitledBorder("Paiement"));
 
         totalLabel = new JLabel("Total à Payer : 0.00 FCFA");
         totalLabel.setFont(new Font("Arial", Font.BOLD, 16));
         paiementPanel.add(totalLabel);
-        paiementPanel.add(new JLabel("")); // Placeholder
+        paiementPanel.add(new JLabel(""));
 
         paiementPanel.add(new JLabel("Montant Reçu (FCFA) :"));
         montantRecuChamp = new JTextField(10);
@@ -103,38 +94,33 @@ public class AchatPanel extends JPanel {
         finaliserAchatBtn = new JButton("Finaliser l'Achat");
         finaliserAchatBtn.addActionListener(_ -> finaliserAchat());
         paiementPanel.add(finaliserAchatBtn);
-        paiementPanel.add(new JLabel("")); // Placeholder
+        paiementPanel.add(new JLabel(""));
 
         monnaieRendueLabel = new JLabel("Monnaie à Rendre : 0.00 FCFA");
         monnaieRendueLabel.setFont(new Font("Arial", Font.BOLD, 14));
         monnaieRendueLabel.setForeground(Color.BLUE);
         paiementPanel.add(monnaieRendueLabel);
-        paiementPanel.add(new JLabel("")); // Placeholder
+        paiementPanel.add(new JLabel(""));
 
         add(paiementPanel, BorderLayout.SOUTH);
 
-        // --- Message de statut (peut être placé ailleurs, par exemple en bas du NORTH) ---
         messageLabel = new JLabel(" ");
         messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         messageLabel.setForeground(Color.RED);
-        ajoutPanel.add(messageLabel); // Placé dans le panneau NORTH pour être visible
+        ajoutPanel.add(messageLabel);
     }
 
-    /**
-     * Met à jour la liste des produits disponibles dans le JComboBox.
-     * Cette méthode doit être appelée quand la liste des produits de la pharmacie change.
-     */
     public void updateProductList() {
         produitSelectionCombo.removeAllItems();
-        produitSelectionCombo.addItem("-- Sélectionnez un produit --"); // Option par défaut
+        produitSelectionCombo.addItem("-- Sélectionnez un produit --");
         for (Produit p : pharmacie.getProduits()) {
             produitSelectionCombo.addItem(p.getNom() + " (Ref: " + p.getReference() + ")");
         }
-        produitSelectionCombo.setSelectedIndex(0); // Sélectionne l'option par défaut
+        produitSelectionCombo.setSelectedIndex(0);
     }
 
     private void ajouterProduitAuPanier() {
-        messageLabel.setText(""); // Effacer les messages précédents
+        messageLabel.setText("");
 
         if (produitSelectionCombo.getSelectedIndex() == 0) {
             messageLabel.setText("Veuillez sélectionner un produit.");
@@ -142,7 +128,6 @@ public class AchatPanel extends JPanel {
         }
 
         String selectedItem = (String) produitSelectionCombo.getSelectedItem();
-        // Extraire la référence du produit: "Nom (Ref: XXX)"
         String ref = selectedItem.substring(selectedItem.indexOf("Ref: ") + 5, selectedItem.lastIndexOf(")"));
         
         String quantiteStr = quantiteChamp.getText().trim();
@@ -170,7 +155,6 @@ public class AchatPanel extends JPanel {
             return;
         }
 
-        // Vérifier si le produit est déjà dans le panier
         LigneFacture ligneExistante = null;
         for (LigneFacture ligne : panierActuel) {
             if (ligne.getRefProduit().equals(ref)) {
@@ -179,7 +163,6 @@ public class AchatPanel extends JPanel {
             }
         }
         
-        // Vérifier le stock disponible
         int stockDisponible = produit.getQuantite();
         int quantiteDejaAuPanier = (ligneExistante != null) ? ligneExistante.getQuantite() : 0;
         
@@ -188,24 +171,19 @@ public class AchatPanel extends JPanel {
              return;
         }
 
-
         if (ligneExistante != null) {
-            // Mettre à jour la quantité si le produit est déjà dans le panier
-            // Supprimer l'ancienne ligne et ajouter la nouvelle avec la quantité mise à jour
             panierActuel.remove(ligneExistante);
             panierActuel.add(new LigneFacture(ref, produit.getNom(), quantiteDejaAuPanier + quantite, produit.prixTTC()));
         } else {
-            // Ajouter une nouvelle ligne au panier
             panierActuel.add(new LigneFacture(ref, produit.getNom(), quantite, produit.prixTTC()));
         }
 
-        // Rafraîchir le tableau du panier
         refreshPanierTable();
-        quantiteChamp.setText(""); // Vider le champ quantité
+        quantiteChamp.setText("");
     }
 
     private void refreshPanierTable() {
-        panierTableModel.setRowCount(0); // Effacer toutes les lignes existantes
+        panierTableModel.setRowCount(0);
         totalPanier = 0.0;
 
         for (LigneFacture ligne : panierActuel) {
@@ -236,9 +214,8 @@ public class AchatPanel extends JPanel {
         messageLabel.setText("Ligne supprimée du panier.");
     }
 
-
     private void finaliserAchat() {
-        messageLabel.setText(""); // Effacer les messages précédents
+        messageLabel.setText("");
 
         if (panierActuel.isEmpty()) {
             messageLabel.setText("Le panier est vide. Veuillez ajouter des produits.");
@@ -263,21 +240,18 @@ public class AchatPanel extends JPanel {
             return;
         }
 
-        // Création de la Facture en utilisant le constructeur approprié
         Facture facture = new Facture(pharmacie.getNom(), pharmacie.getAdresse());
         
-        // Ajouter toutes les lignes du panier à la facture
         for (LigneFacture ligne : panierActuel) {
             facture.ajouterLigne(ligne);
         }
 
-        pharmacie.ajouterFacture(facture); // Ajouter la facture à la pharmacie
+        pharmacie.ajouterFacture(facture);
 
-        // Mettre à jour les stocks réels des produits dans la pharmacie
         for (LigneFacture ligne : panierActuel) {
             Produit p = pharmacie.trouverProduitParReference(ligne.getRefProduit());
             if (p != null) {
-                p.achat(ligne.getQuantite()); // Déduit la quantité du stock
+                p.achat(ligne.getQuantite());
             }
         }
 
@@ -288,15 +262,13 @@ public class AchatPanel extends JPanel {
         messageLabel.setText("Achat finalisé ! Facture N°" + facture.getNumeroFacture() + " générée.");
         messageLabel.setForeground(Color.GREEN);
         
-        // Optionnel: Afficher la facture complète dans une boîte de dialogue ou la console
-        // JOptionPane.showMessageDialog(this, facture.toString(), "Détails de la Facture", JOptionPane.INFORMATION_MESSAGE);
-        System.out.println(facture.toString()); // Afficher dans la console
+        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        FactureDialog factureDialog = new FactureDialog(parentFrame, facture);
+        factureDialog.setVisible(true); 
 
-        // Vider le panier pour un nouvel achat
         panierActuel.clear();
-        refreshPanierTable(); // Rafraîchir le tableau du panier vidé
+        refreshPanierTable(); 
 
-        // Notifier le dataListener que les données de la pharmacie ont changé
         if (dataListener != null) {
             dataListener.onPharmacieDataChanged();
         }

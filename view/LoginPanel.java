@@ -7,8 +7,7 @@ import model.Utilisateur;
 
 public class LoginPanel extends JPanel {
     private Pharmacie pharmacie;
-    private LoginListener loginListener; // Pour communiquer le résultat de la connexion
-
+    private LoginListener loginListener; 
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton;
@@ -16,11 +15,10 @@ public class LoginPanel extends JPanel {
 
     public LoginPanel(Pharmacie pharmacie, LoginListener listener) {
         this.pharmacie = pharmacie;
-        this.loginListener = listener; // Le listener est typiquement la MainFrame
-
+        this.loginListener = listener; 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Espacement entre les composants
+        gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // Titre
@@ -28,7 +26,7 @@ public class LoginPanel extends JPanel {
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.gridwidth = 2; // Occupe 2 colonnes
+        gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         add(titleLabel, gbc);
 
@@ -78,14 +76,13 @@ public class LoginPanel extends JPanel {
 
     private void attemptLogin() {
         String username = usernameField.getText();
-        String password = new String(passwordField.getPassword()); // Récupérer le mot de passe du JPasswordField
+        String password = new String(passwordField.getPassword()); 
 
         Utilisateur utilisateur = pharmacie.authentifier(username, password);
 
         if (utilisateur != null) {
             messageLabel.setText("Connexion réussie !");
             messageLabel.setForeground(Color.GREEN);
-            // Informer le listener (MainFrame) que la connexion est réussie
             if (loginListener != null) {
                 loginListener.onLoginSuccess(utilisateur);
             }

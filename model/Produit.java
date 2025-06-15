@@ -44,7 +44,7 @@ public abstract class Produit {
         return nom;
     }
 
-    public double getPrixHt() { // <--- AJOUTEZ CE GETTER
+    public double getPrixHt() { 
         return prixHt;
     }
 

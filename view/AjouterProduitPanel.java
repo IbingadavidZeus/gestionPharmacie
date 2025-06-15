@@ -6,13 +6,14 @@ import model.*;
 
 public class AjouterProduitPanel extends JPanel {
     private Pharmacie pharmacie;
-    private Utilisateur utilisateurConnecte;
+    private Utilisateur utilisateurConnecte; 
+
     private JTextField refField;
     private JTextField nomField;
     private JTextField prixField;
     private JTextField quantiteField;
     private JComboBox<String> typeCombo;
-    
+
     // Champs spécifiques
     private JCheckBox generiqueCheck;
     private JCheckBox ordonnanceCheck;
@@ -21,10 +22,10 @@ public class AjouterProduitPanel extends JPanel {
     private JButton btnAjouter;
     private JLabel messageLabel;
 
-    // Constructeur modifié pour accepter l'utilisateur connecté
+    // Constructeur principal, maintenant avec le paramètre Utilisateur
     public AjouterProduitPanel(Pharmacie pharmacie, Utilisateur utilisateur) {
         this.pharmacie = pharmacie;
-        this.utilisateurConnecte = utilisateur;
+        this.utilisateurConnecte = utilisateur; // Initialise l'utilisateur connecté
         setLayout(new BorderLayout());
 
         JPanel formPanel = new JPanel(new GridLayout(10, 2, 5, 5));
@@ -80,13 +81,10 @@ public class AjouterProduitPanel extends JPanel {
         messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         add(messageLabel, BorderLayout.NORTH);
 
-        applyPermissions();
+        applyPermissions(); // Appliquer les permissions au démarrage du panneau
     }
 
-    public AjouterProduitPanel(Pharmacie pharmacie2, MainFrame mainFrame) {
-        
-    }
-
+    // Méthode pour mettre à jour l'affichage des champs en fonction du type de produit sélectionné
     private void updateProductTypeFields() {
         String selectedType = (String) typeCombo.getSelectedItem();
         boolean isMedicament = "Médicament".equals(selectedType);
@@ -97,6 +95,7 @@ public class AjouterProduitPanel extends JPanel {
         }
 
     private void applyPermissions() {
+        // Le rôle est "Admin" (en majuscule ou minuscule)
         boolean isAdmin = utilisateurConnecte != null && "Admin".equalsIgnoreCase(utilisateurConnecte.getRole());
 
         refField.setEnabled(isAdmin);
@@ -119,6 +118,7 @@ public class AjouterProduitPanel extends JPanel {
     }
 
     private void ajouterProduit() {
+        // Re-vérifier les permissions au moment de l'action pour plus de sécurité
         if (utilisateurConnecte == null || !"Admin".equalsIgnoreCase(utilisateurConnecte.getRole())) {
             messageLabel.setText("Accès refusé : Seul un administrateur peut ajouter des produits.");
             messageLabel.setForeground(Color.RED);
@@ -141,7 +141,7 @@ public class AjouterProduitPanel extends JPanel {
         try {
             prixHt = Double.parseDouble(prixStr);
             quantite = Integer.parseInt(quantiteStr);
-            if (prixHt <= 0 || quantite < 0) { // La quantité peut être 0 lors de l'ajout initial
+            if (prixHt <= 0 || quantite < 0) { 
                 messageLabel.setText("Prix doit être positif et quantité non négative.");
                 messageLabel.setForeground(Color.RED);
                 return;
@@ -154,11 +154,10 @@ public class AjouterProduitPanel extends JPanel {
 
         // Vérifier si la référence existe déjà
         if (pharmacie.trouverProduitParReference(ref) != null) {
-            messageLabel.setText("Erreur : Une référence de produit existe déjà avec cette référence.");
+            messageLabel.setText("Erreur : Un produit avec cette référence existe déjà.");
             messageLabel.setForeground(Color.RED);
             return;
         }
-
 
         String typeProduit = (String) typeCombo.getSelectedItem();
         if ("Médicament".equals(typeProduit)) {
@@ -166,7 +165,7 @@ public class AjouterProduitPanel extends JPanel {
             boolean ordonnance = ordonnanceCheck.isSelected();
             Medicament med = new Medicament(ref, nom, prixHt, quantite, generique, ordonnance);
             pharmacie.ajouterProduit(med);
-        } else { // Parapharmacie
+        } else { 
             String typePara = typeParaField.getText().trim();
             if (typePara.isEmpty()) {
                 messageLabel.setText("Veuillez renseigner la catégorie parapharmacie.");
@@ -180,7 +179,7 @@ public class AjouterProduitPanel extends JPanel {
         messageLabel.setText("Produit ajouté avec succès !");
         messageLabel.setForeground(Color.BLUE);
         clearForm();
-    }
+        }
 
     private void clearForm() {
         refField.setText("");
@@ -190,7 +189,7 @@ public class AjouterProduitPanel extends JPanel {
         generiqueCheck.setSelected(false);
         ordonnanceCheck.setSelected(false);
         typeParaField.setText("");
-        typeCombo.setSelectedIndex(0); // Réinitialise à "Médicament"
-        updateProductTypeFields(); // Mettre à jour l'affichage des champs
+        typeCombo.setSelectedIndex(0); 
+        updateProductTypeFields(); 
     }
 }

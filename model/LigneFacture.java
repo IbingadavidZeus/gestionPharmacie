@@ -1,24 +1,22 @@
 package model;
 
-import java.io.Serializable;
+import java.io.Serializable; // Pour permettre la sauvegarde/chargement si nécessaire
 
 public class LigneFacture implements Serializable {
-    private static final long serialVersionUID = 1L; 
+    private static final long serialVersionUID = 1L; // Pour la sérialisation
+
     private String refProduit;
     private String nomProduit;
     private int quantite;
-    private double prixUnitaire;
-    private double totalLigne;
+    private double prixUnitaire; // Prix unitaire TTC au moment de l'achat
 
     public LigneFacture(String refProduit, String nomProduit, int quantite, double prixUnitaire) {
         this.refProduit = refProduit;
         this.nomProduit = nomProduit;
         this.quantite = quantite;
         this.prixUnitaire = prixUnitaire;
-        this.totalLigne = quantite * prixUnitaire; 
     }
 
-    // Getters pour accéder aux attributs
     public String getRefProduit() {
         return refProduit;
     }
@@ -36,6 +34,12 @@ public class LigneFacture implements Serializable {
     }
 
     public double getTotalLigne() {
-        return totalLigne;
+        return quantite * prixUnitaire;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%-15s %-30s %-10d %-15.2f %-15.2f",
+                             refProduit, nomProduit, quantite, prixUnitaire, getTotalLigne());
     }
 }

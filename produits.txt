@@ -35,20 +35,20 @@ MEDICAMENT;MED028;Tramadol;12500.0;15;true;false
 MEDICAMENT;MED029;Amlodipine;10200.0;28;false;false
 MEDICAMENT;MED030;Ventolin;7690.0;12;true;false
 PARAPHARMACIE;PARA011;Oral-B Pro;9500.0;15;Brosse à dents électrique
-PARAPHARMACIE;PARA012;La Roche-Posay Effaclar;16000.0;9;Soin visage acné
+PARAPHARMACIE;PARA012;La Roche-Posay Effaclar;16000.0;28;Soin visage acné
 PARAPHARMACIE;PARA013;Vichy Dercos;13000.0;11;Shampoing anti-chute
 PARAPHARMACIE;PARA014;Sanex Dermo;7800.0;20;Gel douche peaux sensibles
-PARAPHARMACIE;PARA015;Scholl Velvet Smooth;18500.0;7;Râpe électrique pieds
+PARAPHARMACIE;PARA015;Scholl Velvet Smooth;18500.0;17;Râpe électrique pieds
 PARAPHARMACIE;PARA016;Weleda Crème Mains;8900.0;18;Crème hydratante mains
 PARAPHARMACIE;PARA017;Klorane Shampoing Sec;10000.0;13;Shampoing sec
 PARAPHARMACIE;PARA018;Elmex Protection Caries;6500.0;25;Dentifrice
 PARAPHARMACIE;PARA019;Avène Eau Thermale;2580.0;10;Eau thermale spray
 PARAPHARMACIE;PARA020;Neutrogena Hydro Boost;14800.0;12;Crème hydratante
 PARAPHARMACIE;PARA021;Rogé Cavaillès Savon;7200.0;22;Savon surgras
-PARAPHARMACIE;PARA022;Bio-Oil Huile de Soin;19000.0;8;Huile réparatrice
+PARAPHARMACIE;PARA022;Bio-Oil Huile de Soin;19000.0;18;Huile réparatrice
 PARAPHARMACIE;PARA023;Topicrem Ultra-Hydratant;12000.0;14;Lait corps
 PARAPHARMACIE;PARA024;Cicabiafine Crème;9900.0;16;Crème réparatrice
-PARAPHARMACIE;PARA025;Gallia Calisma 1;18780.0;5;Lait infantile
+PARAPHARMACIE;PARA025;Gallia Calisma 1;18780.0;15;Lait infantile
 PARAPHARMACIE;PARA026;Blédina Petits Pots;4500.0;30;Aliments bébé
 MEDICAMENT;MED031;Coartem;6580.0;15;false;true
 MEDICAMENT;MED032;Artesunate;2890.0;20;false;true
@@ -64,5 +64,4 @@ PARAPHARMACIE;PARA030;Sortez couverts;800.0;20;Préservatifs standards
 PARAPHARMACIE;PARA031;Durex Play Sensual;7500.0;15;Lubrifiant à base d'eau
 PARAPHARMACIE;PARA032;Manix Skyn Original;11000.0;12;Lubrifiant hydratant
 PARAPHARMACIE;PARA033;Intimy Hydratant;8700.0;18;Lubrifiant longue durée
-PARAPHARMACIE;PARA034;Comfy Gel Intime;5900.0;20;Gel lubrifiant doux
-
+PARAPHARMACIE;PARA034;Comfy Gel Intime;900.0;20;Gel lubrifiant doux

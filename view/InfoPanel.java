@@ -6,17 +6,20 @@ import model.Pharmacie;
 
 public class InfoPanel extends JPanel {
     private Pharmacie pharmacie;
-    private MainFrame mainFrame;
+    private PharmacieDataListener dataListener; 
+
     private JLabel nomLabel;
     private JLabel adresseLabel;
+
     private JButton btnCharger;
     private JButton btnSauvegarder;
+
     private JLabel messageLabel;
 
-    // Constructeur modifié pour accepter MainFrame
-    public InfoPanel(Pharmacie pharmacie, MainFrame mainFrame) {
+    // CONSTRUCTEUR modifié pour accepter le PharmacieDataListener
+    public InfoPanel(Pharmacie pharmacie, PharmacieDataListener listener) {
         this.pharmacie = pharmacie;
-        this.mainFrame = mainFrame; // Initialise la référence
+        this.dataListener = listener; // Initialisation du listener
 
         setLayout(new BorderLayout(10, 10));
 
@@ -50,13 +53,14 @@ public class InfoPanel extends JPanel {
     }
 
     private void chargerProduits() {
-        pharmacie.getProduits().clear();  
+        // Vider la liste AVANT de charger, pour éviter les doublons si déjà des produits en mémoire
+        pharmacie.getProduits().clear();
         pharmacie.chargerDepuisFichier("produits.txt");
         messageLabel.setText("Produits chargés depuis 'produits.txt'.");
         
-        // Rafraîchir le tableau du stock après le chargement
-        if (mainFrame != null) {
-            mainFrame.refreshStockTable();
+        // Notifier le listener que les données ont changé
+        if (dataListener != null) {
+            dataListener.onPharmacieDataChanged();
         }
     }
 
@@ -64,8 +68,9 @@ public class InfoPanel extends JPanel {
         pharmacie.sauvegarderDansFichier("produits.txt");
         messageLabel.setText("Produits sauvegardés dans 'produits.txt'.");
         
-        if (mainFrame != null) {
-            mainFrame.refreshStockTable();
+        // Notifier le listener que les données ont changé (utile si la sauvegarde implique un tri, etc.)
+        if (dataListener != null) {
+            dataListener.onPharmacieDataChanged();
         }
     }
 }

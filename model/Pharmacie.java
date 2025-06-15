@@ -4,18 +4,36 @@ import java.util.*;
 import java.io.*;
 
 public class Pharmacie {
+    // private static final long serialVersionUID = 1L;
     private String nom;
     private String adresse;
     private List<Produit> produits;
     private List<Facture> factures; 
+    private List<Utilisateur> utilisateurs;
 
     public Pharmacie(String nom, String adresse) {
         this.nom = nom;
         this.adresse = adresse;
         this.produits = new ArrayList<>();
         this.factures = new ArrayList<>();
+        this.utilisateurs = new ArrayList<>();
+        initialiserUtilisateurs();
     }
 
+    protected void initialiserUtilisateurs(){
+        utilisateurs.add(new Utilisateur("davidibinga", "admin123", "admin"));
+        utilisateurs.add(new Utilisateur("vendeur", "vendeur123", "vendeur"));
+    }
+    public Utilisateur authentifier(String nomUtilisateur, String motDePasse){
+        for (Utilisateur user: utilisateurs){
+            if (user.getNomUtilisateur().equals(nomUtilisateur) && user.verifierMotDePasse(motDePasse)){
+                System.out.println("Authentification réussie pour : " + nomUtilisateur);
+                return user;
+            }
+        }
+        System.out.println("Echec de l'authentification pour : " + nomUtilisateur);
+        return null;
+    }
     public void ajouterProduit(Produit p) {
         produits.add(p);
     }
